@@ -7,8 +7,23 @@
 
 \subgroup{4}{Hongbei Chen, Xin Peng and Robert Ruigrok}
 
+Oke guys, lets list here how we are going to do this:
+\begin{itemize}
+    \item Rob: describe the evolution of the system, the way coordinates and probabilities are represented in the code, with some simple diagrams about how it works. Further I will include output plots of the code. If necessary, I can also create some plots to illustrate scaling (to show this quadratic relationship) or I could make some distribution plots per wall.
+    \item Carlin?
+    \item Yue?
+\end{itemize}
+
 \paragraph{Model presentation}
+In this example we simulate the random walk of a particle in a 2D space. A random walk is a mathematical object, known as a stochastic or random process, that describes a path that consists of a succession of random steps. In order to simulate this process, we let a particle move over a discrete grid of point, where its motion is drawn from a set of possible direction. In this simulation we are interested in finding expected distribution of particles after a certain amount of time steps, as well as the position where they hit the boundaries of the spatial grid.
+
+
 What is the model we want to simulate? What do we want to observe? Which is the state space and the dynamics?
+
+Include picture of the grid. How do I define coordinates?
+Diagram of how a particle moves, with propabilities.
+Write "official" formula for the system dynamics.
+Mention the amount of iterations.
 
 \paragraph{Implementation}
 Explain the structure of the code. Do not put necessarily all the code (not more than 100 lines) since some routines (functions) can hide efficiently some unnecessary complexity. Provide a code that run (and explicit librairies and dependencies). Ensure your file name is aligned with this part.
@@ -18,6 +33,10 @@ Explain the structure of the code. Do not put necessarily all the code (not more
  
 \paragraph{Interpretation}
 Relate these quantities to the model and to theoretical knowledge of the course.
+
+Here I can include some distribution graphs of how the particles are distributed along the walls. We do not know the what we whould get analytically, but it my be illustrative for something.
+carlin.liao@berkeley.edu
+We can also talk about how scaling works. If we make the grid bigger, the time needs to scale quadratically to get similarly looking results. Those sorts of thing + include two pictures.
 
  \paragraph{Conclusion}
  What have we learned? Is everything aligned (theory and practice)? What was difficult? Provide perspectives.
