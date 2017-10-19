@@ -60,36 +60,49 @@ import pylab
 
 ############## START INPUT #################
 
-GridSizeSquare = 20                                         #define the size of your grid. There will be walls around the box
-Pos_init = np.ceil(np.array([0.4,0.4])*GridSizeSquare)      #define starting position as ratio or grid size
-T = 0.1*np.power(GridSizeSquare, 2)                         #this is the total amount of time steps, scale with square of grid size
-n_particles = 10000           # amount of particles. 10000+ gives a nice distribution
-subplot_row = 2             # define the amount of subplots that you like
+GridSizeSquare = 20 # n, will create an nxn grid
+#define starting position as ratio or grid size
+Pos_init = np.ceil(np.array([0.4,0.4])*GridSizeSquare)
+#T is the total amount of time steps, scale with square of grid size. 0.3 is nice
+T = 0.3*np.power(GridSizeSquare, 2)
+n_particles = 10000 # #particles. 10000+ recommended
+# define the # of subplots for intermediate time snap shots
+subplot_row = 2             
 subplot_column = 2
-motion_prob = np.array([0.2,0.2,0.2,0.2,0.2])   #defines the probabilities for drift: ([up,right,down,left,no motion]) 
+#defines the drift probabilities: ([up,right,down,left,0]) 
+motion_prob = np.array([0.2,0.2,0.2,0.2,0.2])
 
 ############## END INPUT #################
 
-x_grid = GridSizeSquare     #only look at square grids, but this could be changed
+#only look at square grids, but this could be changed:
+x_grid = GridSizeSquare
 y_grid = GridSizeSquare
-n_subplot = subplot_row*subplot_column;
-Plot_interval = np.floor((T-1)/(n_subplot-1));          #This determines when you take snapshots of the proces, every "Plot_interval" timesteps
+n_subplot = subplot_row*subplot_column
+Plot_interval = np.floor((T-1)/(n_subplot-1))
+#This determines when you take snapshots of the process, every "Plot_interval" time steps
 
 # now define the probabilities of the random walk
 # notation of motion ([up,right,down,left,no motion])
-motion_prob = motion_prob/np.sum(motion_prob)               # normalize in case probabilities do not add up to 1...
-motion_xy = np.array([[0,1],[1,0],[0,-1],[-1,0],[0,0],])    # define the change in coordinates of every motion
-motion_prob_percentile = np.cumsum(motion_prob)             # used later to draw from with randomizer
+# I normalized in case probabilities do not add up to 1...
+motion_prob = motion_prob/np.sum(motion_prob)
+# define the change in coordinates of every motion:
+motion_xy = np.array([[0,1],[1,0],[0,-1],[-1,0],[0,0],])
+motion_prob_percentile = np.cumsum(motion_prob)
+# this is used later to draw from with randomizer
 
-# make an empty data grid from where you are going to count the amount occurances and hits against the wall
-Data = np.zeros((x_grid+2,y_grid+2)) #be careful with x-y being row-column here, "+2" for wall data
-Data_resized = np.zeros((Data.shape[0]+1,Data.shape[1]+1))  #for plotting purposes, I need to add an extra row an column
-Data_TimeVarying = np.zeros((n_subplot,Data_resized.shape[0],Data_resized.shape[1]))    #for subplots
-# prepare some arrays for later plotting (not in loop for speed)
+# make an empty data grid from where you are going to count the amount occurrences and hits against the wall
+Data = np.zeros((x_grid+2,y_grid+2)) # "+2" for wall data
+Data_resized = np.zeros((Data.shape[0]+1,Data.shape[1]+1))
+# This for plotting purposes, I need to add an extra row an column for some reason
+# Now create a new empty data set for the intermediate plots:
+Data_TimeVarying = np.zeros((n_subplot,Data_resized.shape[0],Data_resized.shape[1]))
+
+# construct some arrays for plotting later on:
 xx, yy = pylab.meshgrid(
     pylab.linspace(-1,x_grid+1,x_grid+3),
     pylab.linspace(-1,y_grid+1,y_grid+3))
 
+# Here, start loop over all the particles after each other:
 for i in range(1, n_particles+1):
     # Initialize simulation
     t = 0
@@ -132,7 +145,7 @@ Data_TimeVarying_Corrected = np.cumsum(Data_TimeVarying,axis=0)
 Data_TimeVarying_Corrected[:,1:x_grid+1,1:y_grid+1] = Data_TimeVarying[:,1:x_grid+1,1:y_grid+1]
 
 
-# This loop creates several subplots of the time instaces that you specified at the input
+# This loop creates subplots at several time instances
 plt.figure()
 for j in range(1, n_subplot+1):
     #Now visualize the outcomes
@@ -186,16 +199,18 @@ It is clearly visible how the particles spread out over time and make their way 
 \paragraph{Interpretation}
 {\it Relate these quantities to the model and to theoretical knowledge of the course.}\newline
 
-{\it I think this motion is described by Fick's Law in 2 dimension}
+{\it I think this motion is described by Fick's Law in 2 dimension. The concentration on a specific point changes over time, depending on the concentration of its surroundings. Should we derive why the second derivative matters? $\phi$ is the concentration, $D$ the diffusion coefficient.}
 
 \begin{equation}
 \label{eq:FicksLaw}
-\frac{\partial Q}{\partial t} = \frac{\partial s}{\partial t}
+\frac{d\phi}{dt} = D\nabla\phi = D \big(\frac{d^2\phi}{dx^2} + \frac{d^2\phi}{dy^2}\big)
 \end{equation}
 
 
  \paragraph{Conclusion}
  \textit{What have we learned? Is everything aligned (theory and practice)? What was difficult? Provide perspectives.}
  
- The dynamics of the random walk were easy to model. The challenge in this simulation was to save the data for the intermediate time steps. Since the particles are simulated one by one for the full time horizon, we had to write some non-intuitive code to save the location of every particle at the relevant intermediate time steps.
+ The dynamics of the random walk were easy to model. The challenge in this simulation was to save the data for the intermediate time steps. Since the particles are simulated one by one for the full time horizon, we had to write some non-intuitive code to save the location of every particle at the relevant intermediate time steps. \newline
+ 
+ From the lecture we recall that diffusion distance scales with the square root of time. Here we tried to simulate that. When doubling the grid size and taking a four times higher simulation horizon, the distribution looks similar. However, we have the idea that the scaling did not work for 100\%. At the end of the scaled simulation horizon, it seems as if the smaller grid has relatively more particles in the grid than the larger grid has. What could cause this difference?
  
