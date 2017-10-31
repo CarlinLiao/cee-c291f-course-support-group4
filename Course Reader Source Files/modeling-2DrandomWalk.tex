@@ -8,69 +8,73 @@
 \subgroup{4}{Carlin Liao}
 
 \paragraph{Description}
-For the purposes of this model, we consider a one-dimensional medium on infinite length. At $x=0$ is a point diffusion source where, at time $t=0$, we instantaneously release an amount $M$ of matter to diffuse into the system. , and we will attempt to model the evolution of the system using the one-dimensional case of Fick's Law
+Consider a particle in a discrete two-dimensional grid at location $\vec{x}=[x_1,x_2]$ that moves in discrete time intervals. On each movement, the particle has an equal probability of moving one unit in any of the four cardinal directions $[x_1+1,x_2]$, $[x_1-1,x_2]$, $[x_1,x_2+1]$, and $[x_1,x_2-1]$. Our goal is to describe the probability of the point arriving at point $\vec{x}$ at time $t+1$, $P[\vec{x},t+1]$ using Fick's Law.
     
 \paragraph{Model}
-We begin with the statement of Fick's law,
-$$\frac{\partial c}{\partial t} = D \frac{\partial^2 c}{\partial x^2}$$
-which we notice to be dependent on both position $x$ and time $t$, which we are solving for the variable function $c(x,t)$ describing the amount of diffusive matter in the system at any given position $x$ at any time $t$.
+Ultimately, our goal is to find a form of Fick's Law using $p(\vec{x},t) = P[\vec{x},t]$, of which the above description is setup for. Note that we can replace $t$ with $t+1$ or any other $t$ without loss of generality due to the memoryless property of 2D random walk.
 
-Based on the description of our system, we can derive one initial conditions, one boundary condition, and one constant expression.
+We begin by describing $P[\vec{x},t+1]$ using our knowledge of the probabilities of where it may be at the prior time step $t$.
 
-\begin{enumerate}
-    \item {\bf Initial condition.} At time $t=0$, $c(x,0)$ for all $x \neq 0$, as in our description we released all matter at the point source so it could not have diffused into any other part of the system yet.
-    \item {\bf Boundary condition.} $c(x=\pm \infty,t) = 0$ for all $t$ as a consequence of the infinite length of our system.
-    \item {\bf Constant expression.} $\int_{x=-\infty}^{x=\infty}c(x,t) dx= M$ for all $t$ as we have released a fixed amount of diffuse matter into our system. 
-\end{enumerate}
-
-To solve for $c$, we begin by applying Laplacian transformations to both sides of Fick's Law using our conditions.
-
-We begin with the left side,
 \begin{align*}
-    \mathcal{L} \left(\frac{\partial c}{\partial t}\right) &= \int_{t=0}^{t=\infty} \frac{\partial c}{\partial t} e^{-st} dt\\
-    &= c e^{-st} |_{t=0}^{t=\infty} + s \int_{t=0}^{t=\infty} ce^{-st} dt \\
-    &= -c(x,0) + s \int_{t=0}^{t=\infty} ce^{-st} dt \\
-    &= s \int_{t=0}^{t=\infty} ce^{-st} dt \text{ by our initial condition}
+    P\left[\vec{x}, t+1\right] =&\quad\, \frac{1}{4}P\left[\begin{bmatrix} x_1+1\\x_2 \end{bmatrix}, t\right]\\
+    &+\frac{1}{4}P\left[\begin{bmatrix} x_1-1\\x_2 \end{bmatrix}, t\right]\\
+    &+\frac{1}{4}P\left[\begin{bmatrix} x_1\\x_2+1 \end{bmatrix}, t\right]\\
+    &+\frac{1}{4}P\left[\begin{bmatrix} x_1\\x_2-1 \end{bmatrix}, t\right]
 \end{align*}
-followed by the right,
-\begin{align*}
-    \mathcal{L} \left(D \frac{\partial^2 c}{\partial x^2}\right) &= \int_{t=0}^{t=\infty} D \frac{\partial^2 c}{\partial x^2} e^{-st} dt\\
-    &=  D \frac{\partial^2}{\partial x^2}  \int_{t=0}^{t=\infty} ce^{-st} dt
-\end{align*}
-Returning to our original equation, now with Laplacian transforms,
-    $$s \int_{t=0}^{t=\infty} ce^{-st} dt = D \frac{\partial^2}{\partial x^2}  \int_{t=0}^{t=\infty} ce^{-st} dt$$
-    $$\frac{s}{D} \int_{t=0}^{t=\infty} ce^{-st} dt - \frac{\partial^2}{\partial x^2}  \int_{t=0}^{t=\infty} ce^{-st} dt = 0$$
-which we note to no longer be a partial but rather an regular differential equation of $f(x) = \int_{t=0}^{t=\infty} ce^{-st} dt$ which we know of standard solutions to.
-Here, the solution would take the form of (for some constants $A$ and $B$),
-$$f(x) = A\exp\left(x\sqrt{\frac{s}{D}}\right)+B\exp\left(-x\sqrt{\frac{s}{D}}\right)$$
 
-By the setup of our system, we understand exploit symmetry to demonstrate that the infinite areas on both sides of our point source (that is to say $x<0$ and $x>0$ must see identical diffusion distributions, which would only be possible if
-$$f(x,s) = B\exp\left(-|x|\sqrt{\frac{s}{D}}\right)$$
+In order to develop the parallels to Fick's law, we take the Taylor expansions of each of our probabilities with respect to $t$ for $P\left[\vec{x}, t+1\right]$ and with respect to $x$ for each of the probabilities we've used at time $t$.
 
-With this form, we exploit our constant expression and the symmetry of our system to arrive at
-$$\int_{x=0}^{x=\infty}c(x,t) = \frac{M}{2}$$
-and apply Laplacian transforms to both sides to find this in terms of our original $f(x)$ expression
+First, we take the our target probability and find its first order Taylor expansion with respect to time, and using our $p(\vec{x},t)$ as described earlier.
 \begin{align*}
-    \mathcal{L}\left(\int_{x=0}^{x=\infty}c(x,t) dx\right) &= \mathcal{L}\left(\frac{M}{2}\right) \\
-    \int_{x=0}^{x=\infty} \int_{t=0}^{t=\infty} ce^{-st} dt dx &= \frac{M}{2s} \\
-    \int_{x=0}^{x=\infty} f(x,s) dx &= \frac{M}{2s} \\
-    \int_{x=0}^{x=\infty} B\exp\left(-|x|\sqrt{\frac{s}{D}}\right) dx &= \frac{M}{2s} \\
-    \int_{x=0}^{x=\infty} B\exp\left(-x\sqrt{\frac{s}{D}}\right) dx &= \frac{M}{2s} \\
-    A &= \frac{M}{2\sqrt{sD}}
+    P\left[\vec{x}, t+1\right] &\approx P\left[\vec{x}, t+1\right] + \nabla^T_t\left(P\left[\vec{x}, t+1\right]\right) (t+1-t) \\
+    &= p + \frac{\partial p}{\partial t} \\
+    &= p
 \end{align*}
-Reintroducing this back into our solution for $f(x)$,
+Note that we exploit the memoryless property of random walk to reduce $\frac{\partial p}{\partial t}$ to 0, as the probability that a particle performing truly random walk is in a certain location in space is not influenced by time.
+
+Next, we take the second order Taylor expansion of our probabilities of movement in the $x_1$ direction, using similar substitutions as before. Here, $\mathcal{H}(f)$ describes the Hessian of the function $f$. 
 \begin{align*}
-    f(x,s) &= \frac{M}{2\sqrt{sD}}\exp\left(-|x|\sqrt{\frac{s}{D}}\right) \\
-    &= \left(\frac{M}{2\sqrt{D}}\right)\frac{\exp\left(-\frac{|x|}{\sqrt{D}}s^{1/2}\right)}{s^{1/2}}
+    P\left[\begin{bmatrix} x_1\pm1\\x_2 \end{bmatrix}, t\right] &\approx p + \nabla^T_{\vec{x}}(p) \left(\begin{bmatrix} x_1\pm1\\x_2 \end{bmatrix} - \vec{x}\right) + \left(\begin{bmatrix} x_1\pm1\\x_2 \end{bmatrix} - \vec{x}\right)^T \mathcal{H}(p)  \left(\begin{bmatrix} x_1\pm1\\x_2 \end{bmatrix} - \vec{x}\right) \\
+    &= p + \left(\frac{\partial p}{\partial x}\right)^T \begin{bmatrix} \pm1\\0 \end{bmatrix} + \begin{bmatrix} \pm1\\0 \end{bmatrix}^T \begin{bmatrix}
+        \frac{\partial^2 p}{\partial x_1^2} & \frac{\partial p}{\partial x_2 x_1} \\
+        \frac{\partial p}{\partial x_1 x_2} & \frac{\partial^2 p}{\partial x_2^2}
+    \end{bmatrix} \begin{bmatrix} \pm1\\0 \end{bmatrix} \\
+    &= p \pm \left(\frac{\partial p}{\partial x}\right)^T \begin{bmatrix} 1\\0 \end{bmatrix} + \frac{\partial^2 p}{\partial x_1^2}
 \end{align*}
-In order to retrieve $c(x,t)$ we must invert the Laplacian transformation on $f(x)$.
+
+Similarly, we take the second order Taylor expansion for probabilities in the $x_2$ direction.
 \begin{align*}
-    c(x,t) &= \mathcal{L}^{-1}(f(x,s)) \\
-    &= \left(\frac{M}{2\sqrt{D}}\right)\mathcal{L}^{-1}
-    \left(\frac{\exp\left(-\frac{|x|}{\sqrt{D}}s^{1/2}\right)}{s^{1/2}}\right) \\
-    &= \frac{M}{2\sqrt{D\pi t}} \exp\left(\frac{-x^2}{4Dt}\right)
+    P\left[\begin{bmatrix} x_1\\x_2\pm1 \end{bmatrix}, t\right] &\approx 
+    p + 
+    \nabla^T_{\vec{x}}(p) \left(\begin{bmatrix} x_1\\x_2\pm1 \end{bmatrix} - \vec{x}\right) + \left(\begin{bmatrix} x_1\\x_2\pm1 \end{bmatrix} - \vec{x}\right)^T \mathcal{H}(p)  \left(\begin{bmatrix} x_1\\x_2\pm1 \end{bmatrix} - \vec{x}\right) \\
+    &= p \pm \left(\frac{\partial p}{\partial x}\right)^T \begin{bmatrix} 0\\1 \end{bmatrix} + \begin{bmatrix} 0\\1 \end{bmatrix}^T \begin{bmatrix}
+        \frac{\partial^2 p}{\partial x_1^2} & \frac{\partial p}{\partial x_2 x_1} \\
+        \frac{\partial p}{\partial x_1 x_2} & \frac{\partial^2 p}{\partial x_2^2}
+    \end{bmatrix} \begin{bmatrix} 0\\1 \end{bmatrix} \\
+    &= p \pm \left(\frac{\partial p}{\partial x}\right)^T \begin{bmatrix} 0\\1 \end{bmatrix} + \frac{\partial^2 p}{\partial x_2^2}
 \end{align*}
-Thus concluding the derivation of our model. As a final note, notice that this solution is remarkably similar to a Gaussian distribution with $\mathcal{N}(0,2Dt)$ scaled by the mass released $M$.
+
+Now, we combine all of the above into our original expression
+\begin{align*}
+    p =&\quad\, \frac{1}{4}\left(p + \left(\frac{\partial p}{\partial x}\right)^T \begin{bmatrix} 1\\0 \end{bmatrix} + \frac{\partial^2 p}{\partial x_1^2}\right)\\
+    &+\frac{1}{4}\left(p - \left(\frac{\partial p}{\partial x}\right)^T \begin{bmatrix} 1\\0 \end{bmatrix} + \frac{\partial^2 p}{\partial x_1^2}\right)\\
+    &+\frac{1}{4}\left(p + \left(\frac{\partial p}{\partial x}\right)^T \begin{bmatrix} 0\\1 \end{bmatrix} + \frac{\partial^2 p}{\partial x_2^2}\right)\\
+    &+\frac{1}{4}\left(p - \left(\frac{\partial p}{\partial x}\right)^T \begin{bmatrix} 0\\1 \end{bmatrix} + \frac{\partial^2 p}{\partial x_2^2}\right)
+\end{align*}
+We note how the first order terms cancel out and proceed to further simplify. Take note of the use of the Laplacian operator $\nabla^2$.
+\begin{align*}
+    p &= p + \frac{1}{4}\left(\frac{\partial^2 p}{\partial x_1^2}+\frac{\partial^2 p}{\partial x_1^2}+\frac{\partial^2 p}{\partial x_2^2}+\frac{\partial^2 p}{\partial x_2^2}\right) \\
+    0 &= \frac{1}{2}\left(\frac{\partial^2 p}{\partial x_1^2}+\frac{\partial^2 p}{\partial x_2^2}\right)\\
+    \nabla^2 p &= \frac{\partial^2 p}{\partial x_1^2}+\frac{\partial^2 p}{\partial x_2^2}\\
+    \nabla^2 p &= 0
+\end{align*}
+We note that this final result to be (as expected) the solution to Fick's second law in the special case of the diffusion (or random walk, in our case) being independent of time, also known as Laplace's equation. For a more general result (i.e. not assuming that our particle's position is independent of time), using these same methods we would arrive at the more general statement of Fick's second law
+$$\frac{\partial p}{\partial t} = \nabla^2 p$$
+
+To close, while this result was derived for the two-dimensional random walk case, the derivation for n-dimensions should be readily apparent from this case.
 
 
-{\it Adapted from: \url{http://home.agh.edu.pl/~dabrowa/files/Diffusion-equations.pdf}}
+\vspace{12pt}
+
+
+{\it Adapted in part from} \url{http://engineering.dartmouth.edu/~d30345d/courses/engs43/chapter2.pdf}
