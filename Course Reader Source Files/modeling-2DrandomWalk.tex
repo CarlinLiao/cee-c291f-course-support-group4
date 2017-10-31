@@ -1,0 +1,76 @@
+% ***********************************************************************************
+% Pure LaTeX part to be inserted in a document (be careful of depencies of packages & commands
+% Prepared by XXX and YYY under the supervision of Arnaud de La Fortelle
+% Fall 2017
+% 2D wave propagation subsection of the modeling part
+% ***********************************************************************************
+
+\subgroup{4}{Carlin Liao}
+
+\paragraph{Description}
+For the purposes of this model, we consider a one-dimensional medium on infinite length. At $x=0$ is a point diffusion source where, at time $t=0$, we instantaneously release an amount $M$ of matter to diffuse into the system. , and we will attempt to model the evolution of the system using the one-dimensional case of Fick's Law
+    
+\paragraph{Model}
+We begin with the statement of Fick's law,
+$$\frac{\partial c}{\partial t} = D \frac{\partial^2 c}{\partial x^2}$$
+which we notice to be dependent on both position $x$ and time $t$, which we are solving for the variable function $c(x,t)$ describing the amount of diffusive matter in the system at any given position $x$ at any time $t$.
+
+Based on the description of our system, we can derive one initial conditions, one boundary condition, and one constant expression.
+
+\begin{enumerate}
+    \item {\bf Initial condition.} At time $t=0$, $c(x,0)$ for all $x \neq 0$, as in our description we released all matter at the point source so it could not have diffused into any other part of the system yet.
+    \item {\bf Boundary condition.} $c(x=\pm \infty,t) = 0$ for all $t$ as a consequence of the infinite length of our system.
+    \item {\bf Constant expression.} $\int_{x=-\infty}^{x=\infty}c(x,t) dx= M$ for all $t$ as we have released a fixed amount of diffuse matter into our system. 
+\end{enumerate}
+
+To solve for $c$, we begin by applying Laplacian transformations to both sides of Fick's Law using our conditions.
+
+We begin with the left side,
+\begin{align*}
+    \mathcal{L} \left(\frac{\partial c}{\partial t}\right) &= \int_{t=0}^{t=\infty} \frac{\partial c}{\partial t} e^{-st} dt\\
+    &= c e^{-st} |_{t=0}^{t=\infty} + s \int_{t=0}^{t=\infty} ce^{-st} dt \\
+    &= -c(x,0) + s \int_{t=0}^{t=\infty} ce^{-st} dt \\
+    &= s \int_{t=0}^{t=\infty} ce^{-st} dt \text{ by our initial condition}
+\end{align*}
+followed by the right,
+\begin{align*}
+    \mathcal{L} \left(D \frac{\partial^2 c}{\partial x^2}\right) &= \int_{t=0}^{t=\infty} D \frac{\partial^2 c}{\partial x^2} e^{-st} dt\\
+    &=  D \frac{\partial^2}{\partial x^2}  \int_{t=0}^{t=\infty} ce^{-st} dt
+\end{align*}
+Returning to our original equation, now with Laplacian transforms,
+    $$s \int_{t=0}^{t=\infty} ce^{-st} dt = D \frac{\partial^2}{\partial x^2}  \int_{t=0}^{t=\infty} ce^{-st} dt$$
+    $$\frac{s}{D} \int_{t=0}^{t=\infty} ce^{-st} dt - \frac{\partial^2}{\partial x^2}  \int_{t=0}^{t=\infty} ce^{-st} dt = 0$$
+which we note to no longer be a partial but rather an regular differential equation of $f(x) = \int_{t=0}^{t=\infty} ce^{-st} dt$ which we know of standard solutions to.
+Here, the solution would take the form of (for some constants $A$ and $B$),
+$$f(x) = A\exp\left(x\sqrt{\frac{s}{D}}\right)+B\exp\left(-x\sqrt{\frac{s}{D}}\right)$$
+
+By the setup of our system, we understand exploit symmetry to demonstrate that the infinite areas on both sides of our point source (that is to say $x<0$ and $x>0$ must see identical diffusion distributions, which would only be possible if
+$$f(x,s) = B\exp\left(-|x|\sqrt{\frac{s}{D}}\right)$$
+
+With this form, we exploit our constant expression and the symmetry of our system to arrive at
+$$\int_{x=0}^{x=\infty}c(x,t) = \frac{M}{2}$$
+and apply Laplacian transforms to both sides to find this in terms of our original $f(x)$ expression
+\begin{align*}
+    \mathcal{L}\left(\int_{x=0}^{x=\infty}c(x,t) dx\right) &= \mathcal{L}\left(\frac{M}{2}\right) \\
+    \int_{x=0}^{x=\infty} \int_{t=0}^{t=\infty} ce^{-st} dt dx &= \frac{M}{2s} \\
+    \int_{x=0}^{x=\infty} f(x,s) dx &= \frac{M}{2s} \\
+    \int_{x=0}^{x=\infty} B\exp\left(-|x|\sqrt{\frac{s}{D}}\right) dx &= \frac{M}{2s} \\
+    \int_{x=0}^{x=\infty} B\exp\left(-x\sqrt{\frac{s}{D}}\right) dx &= \frac{M}{2s} \\
+    A &= \frac{M}{2\sqrt{sD}}
+\end{align*}
+Reintroducing this back into our solution for $f(x)$,
+\begin{align*}
+    f(x,s) &= \frac{M}{2\sqrt{sD}}\exp\left(-|x|\sqrt{\frac{s}{D}}\right) \\
+    &= \left(\frac{M}{2\sqrt{D}}\right)\frac{\exp\left(-\frac{|x|}{\sqrt{D}}s^{1/2}\right)}{s^{1/2}}
+\end{align*}
+In order to retrieve $c(x,t)$ we must invert the Laplacian transformation on $f(x)$.
+\begin{align*}
+    c(x,t) &= \mathcal{L}^{-1}(f(x,s)) \\
+    &= \left(\frac{M}{2\sqrt{D}}\right)\mathcal{L}^{-1}
+    \left(\frac{\exp\left(-\frac{|x|}{\sqrt{D}}s^{1/2}\right)}{s^{1/2}}\right) \\
+    &= \frac{M}{2\sqrt{D\pi t}} \exp\left(\frac{-x^2}{4Dt}\right)
+\end{align*}
+Thus concluding the derivation of our model. As a final note, notice that this solution is remarkably similar to a Gaussian distribution with $\mathcal{N}(0,2Dt)$ scaled by the mass released $M$.
+
+
+{\it Adapted from: \url{http://home.agh.edu.pl/~dabrowa/files/Diffusion-equations.pdf}}
