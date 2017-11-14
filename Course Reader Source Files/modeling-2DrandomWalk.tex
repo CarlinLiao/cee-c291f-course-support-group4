@@ -9,6 +9,38 @@
 
 \paragraph{Description}
 Consider a particle in a discrete two-dimensional grid at location $\vec{x}=[x_1,x_2]$ that moves in discrete time intervals. On each movement, the particle has an equal probability of moving one unit in any of the four cardinal directions $[x_1+1,x_2]$, $[x_1-1,x_2]$, $[x_1,x_2+1]$, and $[x_1,x_2-1]$. Our goal is to describe the probability of the point arriving at point $\vec{x}$ at time $t+1$, $P[\vec{x},t+1]$ using Fick's Law.
+
+% \usepackage{tikz}
+\begin{figure}[htb]
+\centering
+\begin{tikzpicture}
+
+\fill[black] (-3,-3) rectangle (0,0);
+\fill[black] (3,3) rectangle (6,6);
+\fill[black] (-3,3) rectangle (0,6);
+\fill[black] (3,-3) rectangle (6,0);
+\fill[gray!40!white] (0,0) rectangle (3,3);
+
+\draw[step=3cm,gray,very thin] (-3.01,-3.01) grid (6,6);
+
+% \node at (1.5,1.5) {\huge$(x_1,x_2)$};
+\node at (1.5,1.5) {\huge$\vec{x}$};
+\node at (-1.5,1.5) {\huge$P=\frac{1}{4}$};
+\node at (1.5,-1.5) {\huge$P=\frac{1}{4}$};
+\node at (1.5,4.5) {\huge$P=\frac{1}{4}$};
+\node at (4.5,1.5) {\huge$P=\frac{1}{4}$};
+
+\node at (-4,4.5) {\large\bf$x_2+1$};
+\node at (-4,1.5) {\large\bf$x_2$};
+\node at (-4,-1.5) {\large\bf$x_2-1$};
+
+\node at (-1.5,-4) {\large\bf$x_1-1$};
+\node at (1.5,-4) {\large\bf$x_1$};
+\node at (4.5,-4) {\large\bf$x_1+1$};
+
+\end{tikzpicture}
+\caption{Probability of next step in the 2D random walk}\label{2DrandomWalkProbs.fig}
+\end{figure}
     
 \paragraph{Model}
 Ultimately, our goal is to find a form of Fick's Law using $p(\vec{x},t) = P[\vec{x},t]$, of which the above description is setup for. Note that we can replace $t$ with $t+1$ or any other $t$ without loss of generality due to the memoryless property of 2D random walk.
