@@ -5,10 +5,11 @@
 % 2D wave propagation subsection of the modeling part
 % ***********************************************************************************
 
-\subgroup{4}{Carlin Liao}
+\subgroup{4}{Yue Hu, Carlin Liao and Robert Ruigrok}
 
 \paragraph{Description}
-Consider a particle in a discrete two-dimensional grid at location $\vec{x}=[x_1,x_2]$ that moves in discrete time intervals. On each movement, the particle has an equal probability of moving one unit in any of the four cardinal directions $[x_1+1,x_2]$, $[x_1-1,x_2]$, $[x_1,x_2+1]$, and $[x_1,x_2-1]$. Our goal is to describe the probability of the point arriving at point $\vec{x}$ at time $t+1$, $P[\vec{x},t+1]$ using Fick's Law.
+% Consider a particle in a discrete two-dimensional grid at location $\vec{x}=[x_1,x_2]$ that moves in discrete time intervals. On each movement, the particle has an equal probability of moving one unit in any of the four cardinal directions $[x_1+1,x_2]$, $[x_1-1,x_2]$, $[x_1,x_2+1]$, and $[x_1,x_2-1]$. Our goal is to describe the probability of the point arriving at point $\vec{x}$ at time $t+1$, $P[\vec{x},t+1]$ using Fick's Law.
+Consider a particle in a discrete two-dimensional grid at location $\vec{x}=[x_1,x_2]$ that moves in discrete time intervals. On each timestep, the particle has an equal probability of moving one unit in any of the four cardinal directions $[x_1+1,x_2]$, $[x_1-1,x_2]$, $[x_1,x_2+1]$, and $[x_1,x_2-1]$ or stay in place $[x_1,x_2]$. Our goal is to describe the probability of the point arriving at point $\vec{x}$ at time $t+1$, $P[\vec{x},t+1]$ using Fick's Law.
 
 % \usepackage{tikz}
 \begin{figure}[htb]
@@ -19,16 +20,21 @@ Consider a particle in a discrete two-dimensional grid at location $\vec{x}=[x_1
 \fill[black] (3,3) rectangle (6,6);
 \fill[black] (-3,3) rectangle (0,6);
 \fill[black] (3,-3) rectangle (6,0);
-\fill[gray!40!white] (0,0) rectangle (3,3);
+% \fill[gray!40!white] (0,0) rectangle (3,3);
 
 \draw[step=3cm,gray,very thin] (-3.01,-3.01) grid (6,6);
 
 % \node at (1.5,1.5) {\huge$(x_1,x_2)$};
-\node at (1.5,1.5) {\huge$\vec{x}$};
-\node at (-1.5,1.5) {\huge$P=\frac{1}{4}$};
-\node at (1.5,-1.5) {\huge$P=\frac{1}{4}$};
-\node at (1.5,4.5) {\huge$P=\frac{1}{4}$};
-\node at (4.5,1.5) {\huge$P=\frac{1}{4}$};
+% \node at (1.5,1.5) {\huge$\vec{x}$};
+\node at (1.5,1.5) {\huge$P=\frac{1}{5}$};
+\node at (-1.5,1.5) {\huge$P=\frac{1}{5}$};
+\node at (1.5,-1.5) {\huge$P=\frac{1}{5}$};
+\node at (1.5,4.5) {\huge$P=\frac{1}{5}$};
+\node at (4.5,1.5) {\huge$P=\frac{1}{5}$};
+% \node at (-1.5,1.5) {\huge$P=\frac{1}{4}$};
+% \node at (1.5,-1.5) {\huge$P=\frac{1}{4}$};
+% \node at (1.5,4.5) {\huge$P=\frac{1}{4}$};
+% \node at (4.5,1.5) {\huge$P=\frac{1}{4}$};
 
 \node at (-4,4.5) {\large\bf$x_2+1$};
 \node at (-4,1.5) {\large\bf$x_2$};
@@ -48,17 +54,22 @@ Ultimately, our goal is to find a form of Fick's Law using $p(\vec{x},t) = P[\ve
 We begin by describing $P[\vec{x},t+1]$ using our knowledge of the probabilities of where it may be at the prior time step $t$.
 
 \begin{align*}
-    P\left[\vec{x}, t+1\right] =&\quad\, \frac{1}{4}P\left[\begin{bmatrix} x_1+1\\x_2 \end{bmatrix}, t\right]\\
-    &+\frac{1}{4}P\left[\begin{bmatrix} x_1-1\\x_2 \end{bmatrix}, t\right]\\
-    &+\frac{1}{4}P\left[\begin{bmatrix} x_1\\x_2+1 \end{bmatrix}, t\right]\\
-    &+\frac{1}{4}P\left[\begin{bmatrix} x_1\\x_2-1 \end{bmatrix}, t\right]
+    % P\left[\vec{x}, t+1\right] =&\quad\, \frac{1}{4}P\left[\begin{bmatrix} x_1+1\\x_2 \end{bmatrix}, t\right]\\
+    % &+\frac{1}{4}P\left[\begin{bmatrix} x_1-1\\x_2 \end{bmatrix}, t\right]\\
+    % &+\frac{1}{4}P\left[\begin{bmatrix} x_1\\x_2+1 \end{bmatrix}, t\right]\\
+    % &+\frac{1}{4}P\left[\begin{bmatrix} x_1\\x_2-1 \end{bmatrix}, t\right]
+    P\left[\vec{x}, t+1\right] =&\quad\, \frac{1}{5}P\left[\begin{bmatrix} x_1+1\\x_2 \end{bmatrix}, t\right]\\
+    &+\frac{1}{5}P\left[\begin{bmatrix} x_1-1\\x_2 \end{bmatrix}, t\right]\\
+    &+\frac{1}{5}P\left[\begin{bmatrix} x_1\\x_2+1 \end{bmatrix}, t\right]\\
+    &+\frac{1}{5}P\left[\begin{bmatrix} x_1\\x_2-1 \end{bmatrix}, t\right]\\
+    &+\frac{1}{5}P\left[\begin{bmatrix} x_1\\x_2 \end{bmatrix}, t\right]
 \end{align*}
 
 In order to develop the parallels to Fick's law, we take the Taylor expansions of each of our probabilities with respect to $t$ for $P\left[\vec{x}, t+1\right]$ and with respect to $x$ for each of the probabilities we've used at time $t$.
 
 First, we take the our target probability and find its first order Taylor expansion with respect to time, and using our $p(\vec{x},t)$ as described earlier.
 \begin{align*}
-    P\left[\vec{x}, t+1\right] &\approx P\left[\vec{x}, t+1\right] + \nabla^T_t\left(P\left[\vec{x}, t+1\right]\right) (t+1-t) \\
+    P\left[\vec{x}, t+1\right] &\approx P\left[\vec{x}, t\right] + \nabla^T_t\left(P\left[\vec{x}, t\right]\right) (t+1-t) \\
     &= p + \frac{\partial p}{\partial t} \\
     &= p
 \end{align*}
@@ -86,17 +97,37 @@ Similarly, we take the second order Taylor expansion for probabilities in the $x
     &= p \pm \left(\frac{\partial p}{\partial x}\right)^T \begin{bmatrix} 0\\1 \end{bmatrix} + \frac{\partial^2 p}{\partial x_2^2}
 \end{align*}
 
+Finally we consider the case where the particle does not move at all.
+\begin{align*}
+    P\left[\begin{bmatrix} x_1\\x_2 \end{bmatrix}, t\right] &\approx 
+    p + 
+    \nabla^T_{\vec{x}}(p) \left(\begin{bmatrix} x_1\\x_2 \end{bmatrix} - \vec{x}\right) + \left(\begin{bmatrix} x_1\\x_2 \end{bmatrix} - \vec{x}\right)^T \mathcal{H}(p)  \left(\begin{bmatrix} x_1\\x_2 \end{bmatrix} - \vec{x}\right) \\
+    &= p \pm \left(\frac{\partial p}{\partial x}\right)^T \begin{bmatrix} 0\\0 \end{bmatrix} + \begin{bmatrix} 0\\0 \end{bmatrix}^T \begin{bmatrix}
+        \frac{\partial^2 p}{\partial x_1^2} & \frac{\partial p}{\partial x_2 x_1} \\
+        \frac{\partial p}{\partial x_1 x_2} & \frac{\partial^2 p}{\partial x_2^2}
+    \end{bmatrix} \begin{bmatrix} 0\\0 \end{bmatrix} \\
+    &= p
+\end{align*}
+
 Now, we combine all of the above into our original expression
 \begin{align*}
-    p =&\quad\, \frac{1}{4}\left(p + \left(\frac{\partial p}{\partial x}\right)^T \begin{bmatrix} 1\\0 \end{bmatrix} + \frac{\partial^2 p}{\partial x_1^2}\right)\\
-    &+\frac{1}{4}\left(p - \left(\frac{\partial p}{\partial x}\right)^T \begin{bmatrix} 1\\0 \end{bmatrix} + \frac{\partial^2 p}{\partial x_1^2}\right)\\
-    &+\frac{1}{4}\left(p + \left(\frac{\partial p}{\partial x}\right)^T \begin{bmatrix} 0\\1 \end{bmatrix} + \frac{\partial^2 p}{\partial x_2^2}\right)\\
-    &+\frac{1}{4}\left(p - \left(\frac{\partial p}{\partial x}\right)^T \begin{bmatrix} 0\\1 \end{bmatrix} + \frac{\partial^2 p}{\partial x_2^2}\right)
+    % p =&\quad\, \frac{1}{4}\left(p + \left(\frac{\partial p}{\partial x}\right)^T \begin{bmatrix} 1\\0 \end{bmatrix} + \frac{\partial^2 p}{\partial x_1^2}\right)\\
+    % &+\frac{1}{4}\left(p - \left(\frac{\partial p}{\partial x}\right)^T \begin{bmatrix} 1\\0 \end{bmatrix} + \frac{\partial^2 p}{\partial x_1^2}\right)\\
+    % &+\frac{1}{4}\left(p + \left(\frac{\partial p}{\partial x}\right)^T \begin{bmatrix} 0\\1 \end{bmatrix} + \frac{\partial^2 p}{\partial x_2^2}\right)\\
+    % &+\frac{1}{4}\left(p - \left(\frac{\partial p}{\partial x}\right)^T \begin{bmatrix} 0\\1 \end{bmatrix} + \frac{\partial^2 p}{\partial x_2^2}\right)
+    p =&\quad\, \frac{1}{5}\left(p + \left(\frac{\partial p}{\partial x}\right)^T \begin{bmatrix} 1\\0 \end{bmatrix} + \frac{\partial^2 p}{\partial x_1^2}\right)\\
+    &+\frac{1}{5}\left(p - \left(\frac{\partial p}{\partial x}\right)^T \begin{bmatrix} 1\\0 \end{bmatrix} + \frac{\partial^2 p}{\partial x_1^2}\right)\\
+    &+\frac{1}{5}\left(p + \left(\frac{\partial p}{\partial x}\right)^T \begin{bmatrix} 0\\1 \end{bmatrix} + \frac{\partial^2 p}{\partial x_2^2}\right)\\
+    &+\frac{1}{5}\left(p - \left(\frac{\partial p}{\partial x}\right)^T \begin{bmatrix} 0\\1 \end{bmatrix} + \frac{\partial^2 p}{\partial x_2^2}\right)\\
+    &+\frac{1}{5}\left(p\right)
 \end{align*}
 We note how the first order terms cancel out and proceed to further simplify. Take note of the use of the Laplacian operator $\nabla^2$.
 \begin{align*}
-    p &= p + \frac{1}{4}\left(\frac{\partial^2 p}{\partial x_1^2}+\frac{\partial^2 p}{\partial x_1^2}+\frac{\partial^2 p}{\partial x_2^2}+\frac{\partial^2 p}{\partial x_2^2}\right) \\
-    0 &= \frac{1}{2}\left(\frac{\partial^2 p}{\partial x_1^2}+\frac{\partial^2 p}{\partial x_2^2}\right)\\
+    % p &= p + \frac{1}{4}\left(\frac{\partial^2 p}{\partial x_1^2}+\frac{\partial^2 p}{\partial x_1^2}+\frac{\partial^2 p}{\partial x_2^2}+\frac{\partial^2 p}{\partial x_2^2}\right) \\
+    % 0 &= \frac{1}{2}\left(\frac{\partial^2 p}{\partial x_1^2}+\frac{\partial^2 p}{\partial x_2^2}\right)\\
+    % 0 &= \frac{1}{2}\left(\frac{\partial^2 p}{\partial x_1^2}+\frac{\partial^2 p}{\partial x_2^2}\right)\\
+    p &= p + \frac{1}{5}\left(\frac{\partial^2 p}{\partial x_1^2}+\frac{\partial^2 p}{\partial x_1^2}+\frac{\partial^2 p}{\partial x_2^2}+\frac{\partial^2 p}{\partial x_2^2}\right) \\
+    0 &= \left(\frac{\partial^2 p}{\partial x_1^2}+\frac{\partial^2 p}{\partial x_2^2}\right)\\
     \nabla^2 p &= \frac{\partial^2 p}{\partial x_1^2}+\frac{\partial^2 p}{\partial x_2^2}\\
     \nabla^2 p &= 0
 \end{align*}
